@@ -1,0 +1,22 @@
+void getNextMoves0() {  //Modify for KNIGHT[0] || KNIGHT[1]
+    // Find possible moves for knight[0]
+    std::vector<int> myPossibleMoves;    //initializing a vector that holds all possible moves the knight can make
+    for (int j = 0; j < 11; ++j) {  //looping thru the states array
+        if (states[lastMoves[0][0]][j] == 1) {  // indicates the last move made by this knight and for each potential move 'j', it checks if the move is valid (=1)  KNIGHT[0] = if (states[lastMoves[0][0]][j] == 1) || KNIGHT[1] = if (states[lastMoves[1][0]][j] == 1)
+            myPossibleMoves.push_back(j);    //if the move is valid then we are Populating the Vector with possible moves
+        }
+    }
+    // Determine best move
+    float minMaxDamage = 1.0; // Initialize to highest possible damage value
+    int bestMoveIndex = 0;  stores the index of the move with the minimum maximum damage found
+    for (int myMove : myPossibleMoves) {  // First loop goes thru the list of my possible moves
+        for (int oppMove : myPossibleMoves) {  // Second loop goes thru the list of the opp possible moves
+            float damage = pkProb[myMove][oppMove][1];  This will represent a probability giving the result of damage when "myMove" is used against "oppMove"
+            if (damage < minMaxDamage) {  // If the calculated damage is less than the currently recorded minmaxdamage then this damage and the move index are updated to the new values
+                minMaxDamage = damage;
+                bestMoveIndex = myMove;
+            }
+        }
+    }
+    nextMoveKnight[0] = bestMoveIndex;  //Modify for KNIGHT [0] || KNIGHT [1]
+}
