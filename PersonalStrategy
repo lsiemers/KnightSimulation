@@ -1,0 +1,38 @@
+//overall this strategy focuses on maximizing the damage and keep the damage that we get minimized
+//this strategy allows me to consider multiple outcomes before making a decision
+
+void getNextMoves0() {  //Modify for KNIGHT[0] || KNIGHT[1]
+    std::vector<int> myPossibleMoves;  //initializing a vector that holds all possible moves the knight can make
+    for (int j = 0; j < 11; ++j) {  //looping thru the states array
+        if (states[lastMoves[0][0]][j] == 1) {  // indicates the last move made by this knight and for each potential move 'j', it checks if the move is valid (=1)  KNIGHT[0] = if (states[lastMoves[0][0]][j] == 1) || KNIGHT[1] = if (states[lastMoves[1][0]][j] == 1
+            myPossibleMoves.push_back(j);  //if the move is valid then we are Populating the Vector with possible moves
+        }
+    }
+
+    float bestScore = -1.0; // Initialize to -1.0 to ensure any positive score will replace it during the first comparison
+    int bestMoveIndex = 0;  // Stores the index of the move that achieves the highest score, initialized to 0 as a default
+
+    for (int myMove : myPossibleMoves) {  //Looping thru all the possible moves for myknight
+        float totalScore = 0;
+        int possibleMovesCount = 0;
+
+        for (int oppMove = 0; oppMove < 11; ++oppMove) {    //Looping thru and checking against all potential opponent moves that knight[1] could make
+            if (states[lastMoves[1][0]][oppMove] == 1) {    //This will evaluate of the move makes sense and is True    KNIGHT[0] = if (states[lastMoves[1][0]][j] == 1) || KNIGHT[1] = if (states[lastMoves[0][0]][j] == 1
+                float myDamage = pkProb[myMove][oppMove][0];   //Damage I can possibly make
+                float oppDamage = pkProb[myMove][oppMove][1];   //Damage that the opponent could possibly make
+                float score = myDamage - oppDamage;       
+                totalScore += score;    //keeps track of the accumulated scores for all valid opponent moves 
+                possibleMovesCount++;
+            }
+        }
+        if (possibleMovesCount > 0) {  //Checks if any valid moves were found for the opponent knight[1] during the loop above
+            float avgScore = totalScore / possibleMovesCount;  //total score is the sum of scored from all valid moves evaluated against each opponents move. The score typically reflects the effectiveness of 'myMov" against all valid moves of the opponent (the higher score is better)
+            if (avgScore > bestScore) {  //Comparing the scores and updating the scores
+                bestScore = avgScore;
+                bestMoveIndex = myMove;
+            }
+        }
+    }
+
+    nextMoveKnight[0] = bestMoveIndex;  //Modify for KNIGHT[0] || KNIGHT[1]
+}
